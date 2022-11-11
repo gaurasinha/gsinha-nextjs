@@ -49,9 +49,23 @@ let selected = null;
 const onClick = event => {
   const square = event.target.id;
   console.log('clicked ' + square);
+  console.log(gameState.moves[square])
+  console.log('selected ' + square);
+  console.log('square ' + square);
 
+  
   // check to see if we are moving a piece
   if (selected && gameState.moves[selected].includes(square)) {
+
+    //clear ighlighted moves
+
+    gameState.moves[selected].forEach(move => {
+
+    const el = document.getElementById(move);
+    //console.log(el)
+    el.classList.remove(styles.isMoveOption);
+    // el.classList.remove('other_example');
+  })
     // move the piece
     game.move(selected, square);
     gameState = game.exportJson();
@@ -66,6 +80,7 @@ const onClick = event => {
 
     // move the ai piece
     const [movedFrom, movedTo] = Object.entries(game.aiMove())[0];
+    console.log(movedFrom,movedTo)
 
     gameState = game.exportJson();
 
@@ -74,12 +89,32 @@ const onClick = event => {
     // and putting the piece on the new square
     document.getElementById(movedTo).innerText = GLYPHS[gameState.pieces[movedTo]];
 
-  } else if (selected) {
+  }else if (selected) {
     // they tried to move a piece to a random spot on the board
+    
     return;
   } else if (gameState.moves[square]) {
     // clicked on a piece that can move,
     // set the selection to that piece
+      if(selected){
+        gameState.moves[selected].forEach(move => {
+
+        const el = document.getElementById(move);
+        console.log(el)
+        el.classList.remove(styles.isMoveOption);
+        // el.classList.remove('other_example');
+      })
+
+      }
+
+
+    gameState.moves[square].forEach(move => {
+
+    const el = document.getElementById(move);
+    console.log(el)
+    el.classList.add(styles.isMoveOption);
+    // el.classList.remove('other_example');
+  })
     selected = square;
   }
 }
